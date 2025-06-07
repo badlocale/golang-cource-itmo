@@ -14,14 +14,14 @@ func main() {
 	delay := time.Millisecond * 50
 	maxWorkers := 4
 
-	validator :=  services.CreateValidator()
+	validator := services.CreateValidator()
 	expressionBuilder := services.CreateExpressionBuilder(validator)
 	calculator := services.CreateCalculator(delay)
 	processor := services.CreateConcurrentProcessor(expressionBuilder, calculator, maxWorkers)
 
 	controller := controllers.CreateGrpcController(processor)
 
-	lis, err := net.Listen("tcp", "localhost:8081")
+	lis, err := net.Listen("tcp", "0.0.0.0:8081")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  grpc:
+    build:
+      context: .
+      dockerfile: ./cmd/grpc/Dockerfile
+    ports:
+      - "8081:8081"
+
+  http:
+    build:
+      context: .
+      dockerfile: ./cmd/http/Dockerfile
+    ports:
+      - "8080:8080"

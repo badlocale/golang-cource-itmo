@@ -34,5 +34,5 @@ func main() {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	_ = r.Run("localhost:8080")
+	_ = r.Run("0.0.0.0:8080")
 }
