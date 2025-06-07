@@ -1,0 +1,35 @@
+syntax = "proto3";
+package calculator;
+option go_package = "./pb";
+
+service CalculatorService {
+  rpc Solve (CalculationRequest) returns (CalculationResponse) {}
+}
+
+message CalculationRequest {
+  repeated Instruction instructions = 1;
+}
+
+message CalculationResponse {
+  repeated VariableResult results = 1;
+  string error = 2;
+}
+
+message Instruction {
+  string type = 1;
+  string var = 2;
+  string op = 3;
+  oneof left {
+    double left_num = 4;
+    string left_var = 5;
+  }
+  oneof right {
+    double right_num = 6;
+    string right_var = 7;
+  }
+}
+
+message VariableResult {
+  string variable = 1;
+  int64 value = 2;
+}
