@@ -30,6 +30,7 @@
 ### Обращение к HTTP API
 
 Адрес метода вычисления выражения: http://localhost:8080/http://0.0.0.0:8080/api/v1/solve
+
 Адрес документации: http://localhost:8080/swagger/index.html
 
 Пример запроса:
