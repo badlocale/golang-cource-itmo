@@ -6,19 +6,29 @@ import (
 	"github.com/badlocale/calculatorgo/internal/model/constants"
 )
 
-type ExpressionBuilder struct{}
-
-func CreateExpressionBuilder() *ExpressionBuilder {
-	return &ExpressionBuilder{}
+type ExpressionBuilder struct {
+	v *Validator
 }
 
-func (ss *ExpressionBuilder) GetExpressions(instructions []dto.Instruction) (map[string]struct{}, []entities.Expression, error) {
+func CreateExpressionBuilder(v *Validator) *ExpressionBuilder {
+	return &ExpressionBuilder{
+		v: v,
+	}
+}
+
+func (eb *ExpressionBuilder) GetExpressions(instructions []dto.Instruction) (map[string]struct{}, []entities.Expression, error) {
 	printVars := make(map[string]struct{})
 	expressions := make([]entities.Expression, 0)
 
 	for _, instruction := range instructions {
+		if err := eb.v.Check(&instruction); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	for _, instruction := range instructions {
 		if instruction.Type == constants.Calculate {
-			expression := ss.instructionToExpression(&instruction)
+			expression := eb.instructionToExpression(&instruction)
 			expressions = append(expressions, expression)
 		} else if instruction.Type == constants.Print {
 			printVars[instruction.Variable] = struct{}{}
@@ -29,7 +39,7 @@ func (ss *ExpressionBuilder) GetExpressions(instructions []dto.Instruction) (map
 }
 
 // TODO REWRITE
-func (ss *ExpressionBuilder) instructionToExpression(cmd *dto.Instruction) entities.Expression {
+func (eb *ExpressionBuilder) instructionToExpression(cmd *dto.Instruction) entities.Expression {
 	switch left := cmd.Left.(type) {
 	case int:
 		switch right := cmd.Right.(type) {

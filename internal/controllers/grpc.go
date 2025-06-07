@@ -19,8 +19,8 @@ func CreateGrpcController(cp *services.ConcurrentProcessor) *GrpcController {
 }
 
 func (controller *GrpcController) Solve(ctx context.Context, req *pb.CalculationRequest) (*pb.CalculationResponse, error) {
-	instructions := make([]dto.Instruction, 0, len(req.Instructions))
-	for i, pbInstr := range req.Instructions {
+	instructions := make([]dto.Instruction, 0)
+	for _, pbInstr := range req.Instructions {
 		instr := dto.Instruction{
 			Type:     pbInstr.Type,
 			Variable: pbInstr.Var,
@@ -29,19 +29,19 @@ func (controller *GrpcController) Solve(ctx context.Context, req *pb.Calculation
 
 		switch x := pbInstr.Left.(type) {
 		case *pb.Instruction_LeftNum:
-			instr.Left = x.LeftNum
+			instr.Left = int(x.LeftNum)
 		case *pb.Instruction_LeftVar:
 			instr.Left = x.LeftVar
 		}
 
 		switch x := pbInstr.Right.(type) {
 		case *pb.Instruction_RightNum:
-			instr.Right = x.RightNum
+			instr.Right = int(x.RightNum)
 		case *pb.Instruction_RightVar:
 			instr.Right = x.RightVar
 		}
 
-		instructions[i] = instr
+		instructions = append(instructions, instr)
 	}
 
 	results, err := controller.cp.Process(instructions)

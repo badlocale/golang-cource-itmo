@@ -194,7 +194,7 @@ func (x *Instruction) GetLeft() isInstruction_Left {
 	return nil
 }
 
-func (x *Instruction) GetLeftNum() float64 {
+func (x *Instruction) GetLeftNum() int64 {
 	if x != nil {
 		if x, ok := x.Left.(*Instruction_LeftNum); ok {
 			return x.LeftNum
@@ -219,7 +219,7 @@ func (x *Instruction) GetRight() isInstruction_Right {
 	return nil
 }
 
-func (x *Instruction) GetRightNum() float64 {
+func (x *Instruction) GetRightNum() int64 {
 	if x != nil {
 		if x, ok := x.Right.(*Instruction_RightNum); ok {
 			return x.RightNum
@@ -242,7 +242,7 @@ type isInstruction_Left interface {
 }
 
 type Instruction_LeftNum struct {
-	LeftNum float64 `protobuf:"fixed64,4,opt,name=left_num,json=leftNum,proto3,oneof"`
+	LeftNum int64 `protobuf:"varint,4,opt,name=left_num,json=leftNum,proto3,oneof"`
 }
 
 type Instruction_LeftVar struct {
@@ -258,7 +258,7 @@ type isInstruction_Right interface {
 }
 
 type Instruction_RightNum struct {
-	RightNum float64 `protobuf:"fixed64,6,opt,name=right_num,json=rightNum,proto3,oneof"`
+	RightNum int64 `protobuf:"varint,6,opt,name=right_num,json=rightNum,proto3,oneof"`
 }
 
 type Instruction_RightVar struct {
@@ -336,9 +336,9 @@ const file_api_proto_calculator_v1_calculator_proto_rawDesc = "" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\x10\n" +
 	"\x03var\x18\x02 \x01(\tR\x03var\x12\x0e\n" +
 	"\x02op\x18\x03 \x01(\tR\x02op\x12\x1b\n" +
-	"\bleft_num\x18\x04 \x01(\x01H\x00R\aleftNum\x12\x1b\n" +
+	"\bleft_num\x18\x04 \x01(\x03H\x00R\aleftNum\x12\x1b\n" +
 	"\bleft_var\x18\x05 \x01(\tH\x00R\aleftVar\x12\x1d\n" +
-	"\tright_num\x18\x06 \x01(\x01H\x01R\brightNum\x12\x1d\n" +
+	"\tright_num\x18\x06 \x01(\x03H\x01R\brightNum\x12\x1d\n" +
 	"\tright_var\x18\a \x01(\tH\x01R\brightVarB\x06\n" +
 	"\x04leftB\a\n" +
 	"\x05right\"B\n" +

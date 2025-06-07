@@ -20,11 +20,11 @@ message Instruction {
   string var = 2;
   string op = 3;
   oneof left {
-    double left_num = 4;
+    int64 left_num = 4;
     string left_var = 5;
   }
   oneof right {
-    double right_num = 6;
+    int64 right_num = 6;
     string right_var = 7;
   }
 }

@@ -11,12 +11,13 @@ func main() {
 	delay := time.Millisecond * 50
 	maxWorkers := 4
 
-	expressionBuilder := services.CreateExpressionBuilder()
+	validator := services.CreateValidator()
+	expressionBuilder := services.CreateExpressionBuilder(validator)
 	calculator := services.CreateCalculator(delay)
 	processor := services.CreateConcurrentProcessor(expressionBuilder, calculator, maxWorkers)
 
 	controller := controllers.CreateHttpController(processor)
-	
+
 	r := gin.Default()
 	r.POST("/solve", controller.Handle)
 	_ = r.Run("localhost:8080")
