@@ -9,15 +9,15 @@ import (
 
 type ConcurrentProcessor struct {
 	eb              IExpressionBuilder
-	c               ICalculator
-	numberOfWorkers int
+	c ICalculator
+	w int
 }
 
-func CreateConcurrentProcessor(eb IExpressionBuilder, c ICalculator, nw int) *ConcurrentProcessor {
+func CreateConcurrentProcessor(eb IExpressionBuilder, c ICalculator, w int) *ConcurrentProcessor {
 	return &ConcurrentProcessor{
-		eb:              eb,
-		c:               c,
-		numberOfWorkers: nw,
+		eb: eb,
+		c:  c,
+		w:  w,
 	}
 }
 
@@ -31,14 +31,14 @@ func (ip *ConcurrentProcessor) Process(instructions []dto.Instruction) ([]model.
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	jobs := make(chan model.Expression, ip.numberOfWorkers*2)
-	results := make(chan model.KeyValuePair, ip.numberOfWorkers*2)
+	jobs := make(chan model.Expression, ip.w*2)
+	results := make(chan model.KeyValuePair, ip.w*2)
 	done := make(chan struct{})
 	dependencyMap := make(map[string][]*model.Expression)
 
 	wg := sync.WaitGroup{}
 
-	for i := 0; i < ip.numberOfWorkers; i++ {
+	for i := 0; i < ip.w; i++ {
 		wg.Add(1)
 		go ip.c.Worker(pack{Ctx: ctx, Exprs: jobs, Kvps: results, Wg: &wg})
 	}

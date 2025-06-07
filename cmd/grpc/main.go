@@ -12,7 +12,7 @@ import (
 
 func main() {
 	delay := time.Millisecond * 50
-	maxWorkers := 4
+	maxWorkers := 10
 
 	validator := services.CreateValidator()
 	expressionBuilder := services.CreateExpressionBuilder(validator)
