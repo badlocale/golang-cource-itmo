@@ -56,7 +56,7 @@ func (vs *Validator) Check(instruction *dto.Instruction) error {
 
 func isSupportedOperand(v any) bool {
 	switch v.(type) {
-	case int, int64, float64, string: // Можно добавить другие числовые типы
+	case int, int64, float64, string:
 		return true
 	default:
 		return false

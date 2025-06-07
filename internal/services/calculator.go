@@ -2,7 +2,7 @@ package services
 
 import (
 	"context"
-	entities "github.com/badlocale/calculatorgo/internal/model"
+	"github.com/badlocale/calculatorgo/internal/model"
 	"github.com/badlocale/calculatorgo/internal/model/constants"
 	"sync"
 	"time"
@@ -10,9 +10,14 @@ import (
 
 type pack struct {
 	Ctx   context.Context
-	Exprs chan entities.Expression
-	Kvps  chan entities.KeyValuePair
+	Exprs chan model.Expression
+	Kvps  chan model.KeyValuePair
 	Wg    *sync.WaitGroup
+}
+
+type ICalculator interface {
+	PerformExpression(model.Expression) int
+	Worker(pack)
 }
 
 type Calculator struct {
@@ -25,7 +30,7 @@ func CreateCalculator(sleepDuration time.Duration) *Calculator {
 	}
 }
 
-func (cs *Calculator) PerformExpression(expression entities.Expression) int {
+func (cs *Calculator) PerformExpression(expression model.Expression) int {
 	time.Sleep(cs.sleepDuration)
 
 	switch expression.GetOperator() {
@@ -61,7 +66,7 @@ func (cs *Calculator) Worker(input pack) {
 			resultKey := expression.GetVariable()
 
 			select {
-			case input.Kvps <- entities.KeyValuePair{Key: resultKey, Value: resultValue}:
+			case input.Kvps <- model.KeyValuePair{Key: resultKey, Value: resultValue}:
 			case <-input.Ctx.Done():
 				return
 			}

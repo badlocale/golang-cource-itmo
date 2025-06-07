@@ -2,9 +2,14 @@ package services
 
 import (
 	"github.com/badlocale/calculatorgo/internal/dto"
+	"github.com/badlocale/calculatorgo/internal/model"
 	entities "github.com/badlocale/calculatorgo/internal/model"
 	"github.com/badlocale/calculatorgo/internal/model/constants"
 )
+
+type IExpressionBuilder interface {
+	GetExpressions([]dto.Instruction) (map[string]struct{}, []model.Expression, error)
+}
 
 type ExpressionBuilder struct {
 	v *Validator

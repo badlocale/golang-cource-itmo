@@ -8,12 +8,12 @@ import (
 )
 
 type ConcurrentProcessor struct {
-	eb              *ExpressionBuilder
-	c               *Calculator
+	eb              IExpressionBuilder
+	c               ICalculator
 	numberOfWorkers int
 }
 
-func CreateConcurrentProcessor(eb *ExpressionBuilder, c *Calculator, nw int) *ConcurrentProcessor {
+func CreateConcurrentProcessor(eb IExpressionBuilder, c ICalculator, nw int) *ConcurrentProcessor {
 	return &ConcurrentProcessor{
 		eb:              eb,
 		c:               c,
@@ -38,7 +38,6 @@ func (ip *ConcurrentProcessor) Process(instructions []dto.Instruction) ([]model.
 
 	wg := sync.WaitGroup{}
 
-	// Start workers
 	for i := 0; i < ip.numberOfWorkers; i++ {
 		wg.Add(1)
 		go ip.c.Worker(pack{Ctx: ctx, Exprs: jobs, Kvps: results, Wg: &wg})
@@ -59,7 +58,6 @@ func (ip *ConcurrentProcessor) Process(instructions []dto.Instruction) ([]model.
 
 	printResults := make([]model.KeyValuePair, 0, len(printVars))
 
-	// Start a goroutine to close results channel when all workers are done
 	go func() {
 		wg.Wait()
 		close(results)
@@ -79,7 +77,7 @@ resultsLoop:
 			}
 
 			if len(printResults) == len(printVars) {
-				cancel() // Signal workers to stop
+				cancel()
 			}
 
 			dependentExpressions := dependencyMap[result.Key]

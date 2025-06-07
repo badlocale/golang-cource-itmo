@@ -23,6 +23,16 @@ func CreateHttpController(cp *services.ConcurrentProcessor) *HttpController {
 	}
 }
 
+// Handle
+// @Summary Вычисление выражения
+// @Description Вычисляет математическое выражение
+// @Tags calculator
+// @Accept json
+// @Produce json
+// @Param instructions body []dto.Instruction true "Список инструкций"
+// @Success 200 {object} []dto.VarValue
+// @Failure 500 {object} Error
+// @Router /solve [post]
 func (controller *HttpController) Handle(c *gin.Context) {
 	var instructions []dto.Instruction
 
