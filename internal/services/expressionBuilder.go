@@ -12,10 +12,10 @@ type IExpressionBuilder interface {
 }
 
 type ExpressionBuilder struct {
-	v *Validator
+	v IValidator
 }
 
-func CreateExpressionBuilder(v *Validator) *ExpressionBuilder {
+func CreateExpressionBuilder(v IValidator) *ExpressionBuilder {
 	return &ExpressionBuilder{
 		v: v,
 	}

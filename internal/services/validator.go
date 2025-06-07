@@ -7,6 +7,10 @@ import (
 	"github.com/badlocale/calculatorgo/internal/model/constants"
 )
 
+type IValidator interface {
+	Check(instruction *dto.Instruction) error
+}
+
 type Validator struct {
 	operators map[string]struct{}
 }
